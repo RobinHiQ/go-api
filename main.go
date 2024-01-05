@@ -1,17 +1,17 @@
 package main
 
 import (
-	"embed"
-	"html/template"
+	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+	"github.com/RobinHiQ/go-api/docs"
+)
+
+import (
 	"log"
 	"net/http"
 	"os"
 )
-
-//go:embed templates/*
-var resources embed.FS
-
-var t = template.Must(template.ParseFS(resources, "templates/*"))
 
 func main() {
 	port := os.Getenv("PORT")
@@ -19,13 +19,19 @@ func main() {
 		port = "8080"
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		data := map[string]string{
-			"Region": os.Getenv("FLY_REGION"),
-		}
+	docs.SwaggerInfo.Title = "API Documentation for Job Description Generator"
+	docs.SwaggerInfo.Description = "Job description generator API"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "https://available-work.fly.dev/"
+	docs.SwaggerInfo.BasePath = "/v2"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-		t.ExecuteTemplate(w, "index.html.tmpl", data)
-	})
+	r := gin.New()
+
+	// use ginSwagger middleware to serve the API docs
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	r.Run()
 
 	log.Println("listening on", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
