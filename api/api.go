@@ -7,13 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//	@Summary		Generate job description
-//	@Description	Generates a job description for the given job title and saves it to Redis
-//	@Param			jobTitle	query		string	true	"The title of the job"
-//  @Produce      json
-//	@Success		200			{string}	string	"Successful operation"
-//	@Router			/job-description [get]
-
+//		@Summary		Generate job description
+//		@Description	Generates a job description for the given job title and saves it to Redis
+//		@Param			jobTitle	query		string	true	"The title of the job"
+//	    @Produce      json
+//		@Success		200			{string}	string	"Successful operation"
+//		@Router			/job-description [get]
 func GetJobDescription(c *gin.Context) {
 	jobTitle := c.Query("jobTitle")
 	if jobTitle == "" {
