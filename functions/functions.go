@@ -1,14 +1,13 @@
 package functions
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
-	"io"
-	"net/http"
+	"log"
 	"os"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/go-resty/resty/v2"
 )
 
 type Prompt struct {
@@ -16,50 +15,45 @@ type Prompt struct {
 	MaxTokens int    `json:"max_tokens"`
 }
 
+const (
+	apiEndpoint = "https://api.openai.com/v1/chat/completions"
+)
+
 func GenerateJobDescription(jobTitle string) (string, error) {
+	apiKey := os.Getenv("OPENAI_API_KEY")
+	client := resty.New()
+
 	prompt := Prompt{
-		Prompt:    "Generate a job description for a " + jobTitle,
+		Prompt:    "Skriv en beskrivning på max 535 tecken för jobbet på svenska: " + jobTitle,
 		MaxTokens: 200,
 	}
 
-	body, err := json.Marshal(prompt)
+	response, err := client.R().
+		SetAuthToken(apiKey).
+		SetHeader("Content-Type", "application/json").
+		SetBody(map[string]interface{}{
+			"model":      "gpt-3.5-turbo",
+			"messages":   []interface{}{map[string]interface{}{"role": "system", "content": prompt.Prompt}},
+			"max_tokens": prompt.MaxTokens,
+		}).
+		Post(apiEndpoint)
+
 	if err != nil {
+		log.Fatalf("Error while sending send the request: %v", err)
+	}
+
+	body := response.Body()
+
+	var data map[string]interface{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		log.Println("Error while decoding JSON response:", err)
 		return "", err
 	}
 
-	req, err := http.NewRequest("POST", "https://api.openai.com/v1/engines/davinci-codex/completions", bytes.NewBuffer(body))
-	if err != nil {
-		return "", err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+os.Getenv("OPENAI_API_KEY"))
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	respBody, _ := io.ReadAll(resp.Body)
-
-	var result map[string]interface{}
-	json.Unmarshal(respBody, &result)
-
-	description := result["choices"].([]interface{})[0].(map[string]interface{})["text"].(string)
-
-	opt, _ := redis.ParseURL(os.Getenv("REDIS_URL"))
-	rdb := redis.NewClient(opt)
-
-	var ctx = context.Background()
-
-	err = rdb.Set(ctx, jobTitle, description, 0).Err()
-	if err != nil {
-		return "", err
-	}
-
-	return description, nil
+	// Extract the content from the JSON response
+	content := data["choices"].([]interface{})[0].(map[string]interface{})["message"].(map[string]interface{})["content"].(string)
+	return content, nil
 }
 
 func GetAllJobs() (string, error) {

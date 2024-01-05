@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/example/helloworld": {
+        "/helloworld": {
             "get": {
                 "description": "do ping",
                 "consumes": [
@@ -88,7 +88,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "https://available-work.fly.dev/",
+	Host:             "available-work.fly.dev",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "API Documentation for Job Description Generator",

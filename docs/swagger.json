@@ -15,10 +15,10 @@
         },
         "version": "1.0"
     },
-    "host": "https://available-work.fly.dev/",
+    "host": "available-work.fly.dev",
     "basePath": "/api/v1",
     "paths": {
-        "/example/helloworld": {
+        "/helloworld": {
             "get": {
                 "description": "do ping",
                 "consumes": [
