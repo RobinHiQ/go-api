@@ -1,4 +1,4 @@
-package main
+package functions
 
 import (
 	"bytes"
@@ -68,25 +68,25 @@ func getAllJobs() (string, error) {
 
 	var ctx = context.Background()
 
-    keys, err := rdb.Keys(ctx, "*").Result()
-    if err != nil {
-        return "", err
-    }
+	keys, err := rdb.Keys(ctx, "*").Result()
+	if err != nil {
+		return "", err
+	}
 
-    values, err := rdb.MGet(ctx, keys...).Result()
-    if err != nil {
-        return "", err
-    }
+	values, err := rdb.MGet(ctx, keys...).Result()
+	if err != nil {
+		return "", err
+	}
 
-    jobs := make(map[string]string)
-    for i, key := range keys {
-        jobs[key] = values[i].(string)
-    }
+	jobs := make(map[string]string)
+	for i, key := range keys {
+		jobs[key] = values[i].(string)
+	}
 
-    jobsJson, err := json.Marshal(jobs)
-    if err != nil {
-        return "", err
-    }
+	jobsJson, err := json.Marshal(jobs)
+	if err != nil {
+		return "", err
+	}
 
-    return string(jobsJson), nil
+	return string(jobsJson), nil
 }

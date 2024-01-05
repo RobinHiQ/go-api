@@ -1,16 +1,15 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
-	"github.com/RobinHiQ/go-api/docs"
-)
-
-import (
 	"log"
 	"net/http"
 	"os"
+
+	controller "github.com/RobinHiQ/go-api/controllers"
+	"github.com/RobinHiQ/go-api/docs"
+	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -30,7 +29,7 @@ func main() {
 
 	// use ginSwagger middleware to serve the API docs
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
+	http.HandleFunc("/job-description", controller.GetJobDescription)
 	r.Run()
 
 	log.Println("listening on", port)
