@@ -1,8 +1,8 @@
-package controller
+package controllers
 
 import (
-	"github.com/RobinHiQ/go-api/functions"
-    "net/http"
+	functions "github.com/RobinHiQ/go-api/functions"
+	"net/http"
 )
 
 // @Summary Get job description
@@ -18,7 +18,7 @@ func GetJobDescription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	description, err := functions
+	description, err := functions.generateJobDescription(jobTitle)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

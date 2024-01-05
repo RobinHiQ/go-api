@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	controller "github.com/RobinHiQ/go-api/controllers"
+	controllers "github.com/RobinHiQ/go-api/controllers"
 	"github.com/RobinHiQ/go-api/docs"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
