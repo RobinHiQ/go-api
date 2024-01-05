@@ -16,7 +16,7 @@ type Prompt struct {
 	MaxTokens int    `json:"max_tokens"`
 }
 
-func generateJobDescription(jobTitle string) (string, error) {
+func GenerateJobDescription(jobTitle string) (string, error) {
 	prompt := Prompt{
 		Prompt:    "Generate a job description for a " + jobTitle,
 		MaxTokens: 200,
@@ -62,7 +62,7 @@ func generateJobDescription(jobTitle string) (string, error) {
 	return description, nil
 }
 
-func getAllJobs() (string, error) {
+func GetAllJobs() (string, error) {
 	opt, _ := redis.ParseURL(os.Getenv("REDIS_URL"))
 	rdb := redis.NewClient(opt)
 
