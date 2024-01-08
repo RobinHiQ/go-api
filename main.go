@@ -39,7 +39,7 @@ func Helloworld(g *gin.Context) {
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
 //	@BasePath	/api/v1
-//	@host		available-work.fly.dev
+//	@host		https://goproject-410606.ew.r.appspot.com/
 
 //	@securityDefinitions.basic	BasicAuth
 

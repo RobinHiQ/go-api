@@ -88,7 +88,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "available-work.fly.dev",
+	Host:             "https://goproject-410606.ew.r.appspot.com/",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "API Documentation for Job Description Generator",

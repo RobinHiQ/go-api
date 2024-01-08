@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "available-work.fly.dev",
+    "host": "https://goproject-410606.ew.r.appspot.com/",
     "basePath": "/api/v1",
     "paths": {
         "/helloworld": {
